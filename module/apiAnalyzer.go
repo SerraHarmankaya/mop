@@ -55,6 +55,7 @@ func ApiAnalyzer(method string, URL string) (Api, error) {
 		return Api{}, err
 	}
 
+	start := time.Now()
 	resp, err := client.Do(req)
 	if err != nil {
 		return Api{}, err
@@ -62,7 +63,7 @@ func ApiAnalyzer(method string, URL string) (Api, error) {
 	defer resp.Body.Close()
 
 	api.StatusCode = resp.StatusCode
-	api.ResponseTime = time.Duration(resp.ContentLength) * time.Millisecond
+	api.ResponseTime = time.Since(start)
 	api.ContentType = resp.Header.Get("Content-Type")
 	api.BodySize = float64(resp.ContentLength)
 
