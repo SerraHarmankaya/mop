@@ -2,6 +2,7 @@ package module
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -72,6 +73,11 @@ func ApiAnalyzer(method string, URL string) (Api, error) {
 	api.ResponseTime = time.Since(start)
 	api.ContentType = resp.Header.Get("Content-Type")
 	api.BodySize = float64(size)
+
+	fmt.Println("Status Code: ", api.StatusCode)
+	fmt.Println("Response Time: ", api.ResponseTime)
+	fmt.Println("Content Type: ", api.ContentType)
+	fmt.Println("Body Size: ", api.BodySize)
 
 	return api, nil
 }

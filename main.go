@@ -24,14 +24,10 @@ func main() {
 		return
 	}
 
-	api, err := module.ApiAnalyzer(method, URL)
+	_, err = module.ApiAnalyzer(method, URL)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
-	fmt.Println("Status Code: ", api.StatusCode)
-	fmt.Println("Response Time: ", api.ResponseTime)
-	fmt.Println("Content Type: ", api.ContentType)
-	fmt.Println("Body Size: ", api.BodySize)
 
 }
