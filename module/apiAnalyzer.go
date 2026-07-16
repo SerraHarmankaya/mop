@@ -10,10 +10,11 @@ import (
 )
 
 type Api struct {
-	StatusCode   int
-	ResponseTime time.Duration
-	ContentType  string
-	BodySize     float64
+	StatusCode    int
+	StatusMessage string
+	ResponseTime  time.Duration
+	ContentType   string
+	BodySize      float64
 }
 
 func ApiAnalyzer(method string, URL string) (Api, error) {
@@ -69,6 +70,7 @@ func ApiAnalyzer(method string, URL string) (Api, error) {
 	}
 
 	api.StatusCode = resp.StatusCode
+	api.StatusMessage = resp.Status
 	api.ResponseTime = time.Since(start)
 	api.ContentType = resp.Header.Get("Content-Type")
 	api.BodySize = float64(size)

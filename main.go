@@ -29,7 +29,7 @@ func main() {
 		fmt.Println("Error:", err)
 		return
 	}
-	fmt.Println("Status Code: ", api.StatusCode)
+	fmt.Println(fmt.Sprintf(`Status Code: %s`, api.StatusMessage))
 	fmt.Println("Response Time: ", api.ResponseTime)
 	fmt.Println("Content Type: ", api.ContentType)
 	fmt.Println("Body Size: ", api.BodySize)
