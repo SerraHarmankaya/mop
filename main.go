@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"mop/module"
+	"net/http"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -24,7 +26,22 @@ func main() {
 		return
 	}
 
-	api, err := module.ApiAnalyzer(method, URL)
+	normalizedMethod := strings.ToUpper(strings.TrimSpace(method))
+
+	var body string
+	if strings.TrimSpace(method) != "" && (normalizedMethod == http.MethodPost || normalizedMethod == http.MethodPut) {
+		fmt.Print("Enter request body (JSON): ")
+
+		body, err = reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("Body input error:", err)
+			return
+		}
+
+		body = strings.TrimSpace(body)
+	}
+
+	api, err := module.ApiAnalyzer(method, URL, body)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return

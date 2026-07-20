@@ -17,7 +17,7 @@ type Api struct {
 	BodySize      float64
 }
 
-func ApiAnalyzer(method string, URL string) (Api, error) {
+func ApiAnalyzer(method string, URL string, body string) (Api, error) {
 
 	var api Api
 
@@ -50,11 +50,17 @@ func ApiAnalyzer(method string, URL string) (Api, error) {
 		return Api{}, errors.New("invalid api url host")
 	}
 
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
 
-	req, err := http.NewRequest(normalizedMethod, normalizedUrl, nil)
+	req, err := http.NewRequest(normalizedMethod, normalizedUrl, strings.NewReader(body))
 	if err != nil {
 		return Api{}, err
+	}
+
+	if normalizedMethod == http.MethodPost || normalizedMethod == http.MethodPut {
+		req.Header.Set("Content-Type", "application/json")
 	}
 
 	start := time.Now()
