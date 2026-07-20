@@ -15,6 +15,7 @@ type Api struct {
 	ResponseTime  time.Duration
 	ContentType   string
 	BodySize      float64
+	ResponseBody  []byte
 }
 
 func ApiAnalyzer(method string, URL string, body string) (Api, error) {
@@ -70,7 +71,7 @@ func ApiAnalyzer(method string, URL string, body string) (Api, error) {
 	}
 	defer resp.Body.Close()
 
-	size, err := io.Copy(io.Discard, resp.Body)
+	responseBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return Api{}, err
 	}
@@ -79,7 +80,8 @@ func ApiAnalyzer(method string, URL string, body string) (Api, error) {
 	api.StatusMessage = resp.Status
 	api.ResponseTime = time.Since(start)
 	api.ContentType = resp.Header.Get("Content-Type")
-	api.BodySize = float64(size)
+	api.BodySize = float64(len(responseBody))
+	api.ResponseBody = responseBody
 
 	return api, nil
 }
